@@ -28,6 +28,7 @@ class MailchimpDataProvider extends BaseDataProvider implements DataProviderInte
     {
         parent::init();
         $this->initClient();
+        $this->prepareModels();
     }
 
     protected function initClient()
@@ -38,21 +39,39 @@ class MailchimpDataProvider extends BaseDataProvider implements DataProviderInte
         );
     }
 
+    /**
+     * Returns the total number of data models.
+     * When [[getPagination|pagination]] is false, this is the same as [[getCount|count]].
+     * @return int total number of possible data models.
+     */
     public function prepareTotalCount()
     {
-        return ArrayHelper::getValue($this->apiResponse, 'total_items');
+        return ArrayHelper::getValue($this->client->get($this->path), 'total_items');
     }
+
 
     public function prepareModels()
     {
-        $this->apiResponse = $this->client->get($this->path);
+        $pagination = $this->getPagination();
+
+        if ($pagination !== false) {
+            $pagination->totalCount = $this->getTotalCount();
+            $limit = $pagination->getLimit();
+            $page = $pagination->getPage();
+        } else {
+            $limit = 20;
+            $page = 0;
+        }
+
+        $this->apiResponse = $this->client->get($this->path, ['count' => $limit, 'offset' => $page]);
 
         return ArrayHelper::getValue($this->apiResponse, $this->entity);
+
     }
 
     public function prepareKeys($models)
     {
-        return array_keys($this->apiResponse[$this->entity]);
+        return ArrayHelper::getColumn($this->apiResponse[$this->entity], 'id');
     }
 }
 
