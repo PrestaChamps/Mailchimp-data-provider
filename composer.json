@@ -1,0 +1,26 @@
+{
+  "name": "prestachamps/mailchimp-data-provider",
+  "description": "Mailchimp data provider for Yii2",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Zoltan Szanto",
+      "email": "mrbig00@gmail.com"
+    }
+  ],
+  "require": {
+    "drewm/mailchimp-api": "@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "PrestaChamps\\": "src/"
+    }
+  },
+  "repositories": {
+    "mailchimp-api": {
+      "type": "vcs",
+      "url": "git@github.com:PrestaChamps/mailchimp-api.git"
+    }
+  }
+}
