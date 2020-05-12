@@ -63,7 +63,7 @@ class MailchimpDataProvider extends BaseDataProvider implements DataProviderInte
             $page = 0;
         }
 
-        $this->apiResponse = $this->client->get($this->path, ['count' => $limit, 'offset' => $page]);
+        $this->apiResponse = $this->client->get($this->path, ['count' => $limit, 'offset' => $limit * $page]);
 
         return ArrayHelper::getValue($this->apiResponse, $this->entity);
 
